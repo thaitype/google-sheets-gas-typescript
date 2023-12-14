@@ -10,3 +10,7 @@ function validateString(value: unknown, title?: string): asserts value is string
 function validateNumber(value: unknown, title?: string): asserts value is number {
   if (typeof value !== 'number') throw new Error(`'${title ?? 'Value'}' must be a number.`);
 }
+
+function uuid() {
+  return Utilities.getUuid();
+}

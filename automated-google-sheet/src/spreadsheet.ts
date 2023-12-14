@@ -4,7 +4,12 @@ function getActiveSpreadsheetName() {
   return activeSpreadsheetName;
 }
 
-function getActiveSheet() {
+interface Sheet {
+  name: string;
+  id: number;
+}
+
+function getActiveSheet(): Sheet {
   const activeSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   return {
     name: activeSheet.getName(),

@@ -6,6 +6,7 @@
  * https://developers.google.com/apps-script/guides/properties
  */
 const hooks = PropertiesService.getScriptProperties();
+// hooks.deleteAllProperties();
 
 /**
  * The event handler triggered when editing the spreadsheet.
@@ -15,4 +16,12 @@ const hooks = PropertiesService.getScriptProperties();
  */
 function onEdit(e: GoogleAppsScript.Events.SheetsOnEdit){
   registerHooks(e, hooks);
+}
+
+/**
+ * Reset Hooks
+ * @customfunction
+ */
+function resetHooks(){
+  hooks.deleteAllProperties();
 }
