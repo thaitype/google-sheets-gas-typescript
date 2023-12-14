@@ -14,3 +14,7 @@ function validateNumber(value: unknown, title?: string): asserts value is number
 function uuid() {
   return Utilities.getUuid();
 }
+
+function invariant(condition: unknown, message?: string): asserts condition {
+  if (!condition) throw new Error(message ?? 'Invariant failed');
+}
