@@ -1,12 +1,9 @@
 /**
  * Global variables
- */
-/**
  * https://developers.google.com/apps-script/reference/properties/properties-service
  * https://developers.google.com/apps-script/guides/properties
  */
 const hooks = PropertiesService.getScriptProperties();
-// hooks.deleteAllProperties();
 
 /**
  * The event handler triggered when editing the spreadsheet.
@@ -14,15 +11,17 @@ const hooks = PropertiesService.getScriptProperties();
  * @see https://developers.google.com/apps-script/guides/triggers#onedite
  * https://developers.google.com/apps-script/guides/triggers/events#edit
  */
-function onEdit(e: GoogleAppsScript.Events.SheetsOnEdit){
+function onEdit(e: GoogleAppsScript.Events.SheetsOnEdit) {
   registerHooks(e, hooks);
 }
+
+// ---------------------------------------- Hook Utils ----------------------------------------
 
 /**
  * Reset Hooks
  * @customfunction
  */
-function resetHooks(){
+function resetHooks() {
   hooks.deleteAllProperties();
 }
 
@@ -31,17 +30,17 @@ function resetHooks(){
  * @param {string} key
  * @customfunction
  */
-function removeHook(key: string){
+function removeHook(key: string) {
   hooks.deleteProperty(key);
 }
 
 /**
  * List Hooks
- * 
- * @returns {string[]} list of hooks
+ *
+ * @returns {string[][]} list of hooks
  * @customfunction
  */
-function listHooks(): string[]{
+function listHooks(): string[][] {
   const hookData = hooks.getProperties();
-  return Object.keys(hookData);
+  return Object.entries(hookData);
 }
