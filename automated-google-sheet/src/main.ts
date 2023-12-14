@@ -25,3 +25,23 @@ function onEdit(e: GoogleAppsScript.Events.SheetsOnEdit){
 function resetHooks(){
   hooks.deleteAllProperties();
 }
+
+/**
+ * Remove Hooks
+ * @param {string} key
+ * @customfunction
+ */
+function removeHook(key: string){
+  hooks.deleteProperty(key);
+}
+
+/**
+ * List Hooks
+ * 
+ * @returns {string[]} list of hooks
+ * @customfunction
+ */
+function listHooks(): string[]{
+  const hookData = hooks.getProperties();
+  return Object.keys(hookData);
+}
