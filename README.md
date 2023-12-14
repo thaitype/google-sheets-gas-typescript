@@ -7,3 +7,8 @@ https://github.com/google/clasp/blob/master/docs/typescript.md
 2. clasp login
 3. clasp push 
 4. or clasp push --watch
+
+
+# Doc
+- https://developers.google.com/apps-script/guides/v8-runtime/migration
+- [Google Apps Script: A Beginner’s Guide](https://www.benlcollins.com/apps-script/google-apps-script-beginner-guide/)
