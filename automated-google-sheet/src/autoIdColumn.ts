@@ -7,20 +7,22 @@ interface AutoIdColumnHookOption extends HookOptionBase {
 
 /**
  * Enable auto id column on sheet
- * @param hookId string Unique ID for the hook
  * @param checkColumn number The Column Number, which using for checking the column if it is not empty, then generate UUID on the ID column
  * @param idColumn number The Column Number, which using for generate UUID
  * @param startRow number The Row Number, which using for start generate UUID
+ * @param _hookId string The Hook ID, which using for identify the hook (Optional)
  *
  * @example `enableAutoIdColumn(COLUMN(B2), COLUMN(A2),ROW(A4))`
  * @customfunction
  */
-function enableAutoIdColumn(hookId: unknown, checkColumn: unknown, idColumn: unknown, startRow: unknown) {
-  validateString(hookId, 'Hook ID');
+function enableAutoIdColumn(checkColumn: unknown, idColumn: unknown, startRow: unknown, _hookId?: string) {
   validateNumber(checkColumn, 'Check column');
   validateNumber(idColumn, 'ID column');
   validateNumber(startRow, 'Start row');
   const sheet = getActiveSheet();
+  const defaultHookId = `autoIdColumn-${sheet.id}-${checkColumn}-${idColumn}-${startRow}`;
+  const hookId = _hookId ?? defaultHookId;
+  validateString(hookId, 'Hook ID');
   logger(`Enabled auto id column on Key='${hookId}' sheet name '${sheet.name}' (id: ${sheet.id})`);
   setHooks(
     hookId,
@@ -32,7 +34,7 @@ function enableAutoIdColumn(hookId: unknown, checkColumn: unknown, idColumn: unk
       startRow,
     } satisfies AutoIdColumnHookOption)
   );
-  return `Enabled Auto Generated ID on Column ${idColumn}`;
+  return `Enabled Auto Generated ID on Column ${idColumn} start from Row ${startRow} when Column ${checkColumn} is not empty`;
 }
 
 function registerAutoIdColumn(e: GoogleAppsScript.Events.SheetsOnEdit, hook: AutoIdColumnHookOption) {

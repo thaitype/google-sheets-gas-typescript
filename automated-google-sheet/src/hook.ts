@@ -49,6 +49,7 @@ if (scriptProps.getProperty(ScriptPropsKey.Hooks) === null) {
 function resetHooks() {
   const scriptProps = PropertiesService.getScriptProperties();
   scriptProps.deleteProperty(ScriptPropsKey.Hooks);
+  return 'Hooks reset';
 }
 
 /**
@@ -71,6 +72,7 @@ function removeHook(key: string) {
   const hooks = getHooks();
   delete hooks[key];
   scriptProps.setProperty(ScriptPropsKey.Hooks, JSON.stringify(hooks));
+  return `Hook '${key}' removed`;
 }
 
 /**
@@ -104,6 +106,27 @@ function listHooks(): string[][] {
   return result;
 }
 
+/**
+ * List a Hook by ID
+ * @param id
+ * @returns {string[][]} hooks with the specified ID
+ * @customfunction
+ */
+function listHook(id: string): string[][]{
+  const hookData = getHooks();
+  const hook = hookData[id];
+  if(!hook) return [['Hook not found', '']];
+  const result: string[][] = [];
+  result.push(Object.keys(hook));
+  const row = [];
+  for(const [key, value] of Object.entries(hook)) {
+    row.push(JSON.stringify(value));
+  }
+  result.push(row);
+  // return [[id, JSON.stringify(hook)]];
+  return result;
+}
+
 
 // ---------------------------------------- ScriptProps ----------------------------------------
 /**
@@ -128,4 +151,5 @@ function listScriptProps(): string[][] {
 function resetScriptProps() {
   const scriptProps = PropertiesService.getScriptProperties();
   scriptProps.deleteAllProperties();
+  return 'Script Props reset';
 }
