@@ -22,7 +22,7 @@ function enableAutoIdColumn(hookId: unknown, checkColumn: unknown, idColumn: unk
   validateNumber(startRow, 'Start row');
   const sheet = getActiveSheet();
   logger(`Enabled auto id column on Key='${hookId}' sheet name '${sheet.name}' (id: ${sheet.id})`);
-  hooks.setProperty(
+  setHooks(
     hookId,
     JSON.stringify({
       type: 'autoIdColumn',
