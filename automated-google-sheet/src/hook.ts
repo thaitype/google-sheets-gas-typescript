@@ -56,7 +56,9 @@ function resetHooks() {
  */
 function setHooks(key: string, value: string) {
   const scriptProps = PropertiesService.getScriptProperties();
-  scriptProps.setProperty(key, value);
+  const hooks = getHooks();
+  hooks[key] = JSON.parse(value);
+  scriptProps.setProperty(ScriptPropsKey.Hooks, JSON.stringify(hooks));
 }
 
 /**
@@ -92,6 +94,7 @@ function getHooks(): Record<string, Hook> {
  */
 function listHooks(): string[][] {
   const hookData = getHooks();
+  if(Object.entries(hookData).length === 0) return [['No hooks found', '']];
   logger(`Listing hooks, length: ${Object.entries(hookData).length}`);
   const result: string[][] = [];
   for(const [key, hook] of Object.entries(hookData)) {
@@ -99,4 +102,30 @@ function listHooks(): string[][] {
     logger(`Hook: ${key}, on sheet ${hook.sheet.name} (#${hook.sheet.id}), type: ${hook.type} `);
   }
   return result;
+}
+
+
+// ---------------------------------------- ScriptProps ----------------------------------------
+/**
+ * List Script Props
+ *
+ * @returns {string[][]} list of Script Props
+ * @customfunction
+ */
+function listScriptProps(): string[][] {
+  const props = PropertiesService.getScriptProperties().getProperties();
+  const result: string[][] = [];
+  for(const [key, value] of Object.entries(props)) {
+    result.push([key, value]);
+  }
+  return result;
+}
+
+/**
+ * Reset Script Props
+ * @customfunction
+ */
+function resetScriptProps() {
+  const scriptProps = PropertiesService.getScriptProperties();
+  scriptProps.deleteAllProperties();
 }
