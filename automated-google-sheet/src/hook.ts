@@ -1,8 +1,20 @@
-type Hook = AutoIdColumnHookOption;
+type Hook = AutoIdColumnHookOption | EnsureColumnCorrectHookOption;
 
 interface HookOptionBase {
   type: string;
   sheet: Sheet;
+}
+
+interface ColumnModifier {
+  checkColumn: number;
+  idColumn: number;
+  startRow: number;
+}
+
+class UnreachableCaseError extends Error {
+  constructor(val: never) {
+    super(`Unreachable case: ${val}`);
+  }
 }
 
 function registerHooks(e: GoogleAppsScript.Events.SheetsOnEdit) {
@@ -19,8 +31,11 @@ function registerHooks(e: GoogleAppsScript.Events.SheetsOnEdit) {
       case 'autoIdColumn':
         registerAutoIdColumn(e, hook);
         break;
+      case 'ensureColumnCorrect':
+        registerEnsureColumnCorrect(e, hook);
+        break;
       default:
-        throw new Error(`Unknown hook type: ${hook.type}`);
+        throw new UnreachableCaseError(hook);
     }
   }
 }

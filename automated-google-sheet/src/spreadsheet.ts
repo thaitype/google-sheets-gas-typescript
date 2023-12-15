@@ -16,3 +16,19 @@ function getActiveSheet(): Sheet {
     id: activeSheet.getSheetId(),
   };
 }
+
+function getAllSheets(): Sheet[] {
+  const sheets = SpreadsheetApp.getActiveSpreadsheet().getSheets();
+  return sheets.map(sheet => ({
+    name: sheet.getName(),
+    id: sheet.getSheetId(),
+  }));
+}
+
+function getSheetById(id: number) {
+  return getAllSheets().find(sheet => sheet.id === id);
+}
+
+function getSheetByName(name: string) {
+  return getAllSheets().find(sheet => sheet.name === name);
+}

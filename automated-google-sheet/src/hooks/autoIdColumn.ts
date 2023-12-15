@@ -1,8 +1,5 @@
-interface AutoIdColumnHookOption extends HookOptionBase {
+interface AutoIdColumnHookOption extends HookOptionBase, ColumnModifier {
   type: 'autoIdColumn';
-  checkColumn: number;
-  idColumn: number;
-  startRow: number;
 }
 
 /**
