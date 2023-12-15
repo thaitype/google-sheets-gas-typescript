@@ -107,23 +107,20 @@ function listHooks(): string[][] {
 }
 
 /**
- * List a Hook by ID
+ * Get a Hook by ID
  * @param id
  * @returns {string[][]} hooks with the specified ID
  * @customfunction
  */
-function listHook(id: string): string[][]{
+function getHook(id: string): string[][]{
   const hookData = getHooks();
   const hook = hookData[id];
   if(!hook) return [['Hook not found', '']];
   const result: string[][] = [];
-  result.push(Object.keys(hook));
-  const row = [];
+  result.push(['id', id]);
   for(const [key, value] of Object.entries(hook)) {
-    row.push(JSON.stringify(value));
+    result.push([key, JSON.stringify(value)]);
   }
-  result.push(row);
-  // return [[id, JSON.stringify(hook)]];
   return result;
 }
 
