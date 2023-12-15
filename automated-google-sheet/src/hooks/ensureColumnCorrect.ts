@@ -59,4 +59,48 @@ function ensureColumnCorrect(
 
 function registerEnsureColumnCorrect(e: GoogleAppsScript.Events.SheetsOnEdit, hook: EnsureColumnCorrectHookOption) {
   logger(`Registering ensure column correct on At=${e.range.getA1Notation()}, ${JSON.stringify(hook)}`);
+  const sourceSheet = getSheetById(hook.sourceSheetId);
+  invariant(sourceSheet, `Source sheet not found. ID: ${hook.sourceSheetId}`);
+
+  const sourceIdColumnData: string[] = (
+    sourceSheet
+      .getRange(hook.source.startRow, hook.source.idColumn, sourceSheet.getLastRow(), 1)
+      .getValues() as string[][]
+  ).map(row => row[0]);
+  const sourceCheckColumnData: string[] = (
+    sourceSheet
+      .getRange(hook.source.startRow, hook.source.checkColumn, sourceSheet.getLastRow(), 1)
+      .getValues() as string[][]
+  ).map(row => row[0]);
+
+  if (e.range.getColumn() == hook.checkColumn && e.value != '') {
+    logger(`In range, changed range: ${e.range.getA1Notation()}`);
+    let sheet = e.source.getSheetByName(hook.sheet.name);
+    invariant(sheet, `Sheet '${hook.sheet.name}' not found`);
+    const sourceId = sourceIdColumnData[sourceCheckColumnData.indexOf(e.value)];
+    addDataToRow(sheet, hook, sourceId, e.range.getRow());
+  } else {
+    logger(`Out of range, changed range: ${e.range.getA1Notation()}`);
+  }
+}
+
+/**
+ * add UUIDs To Empty Rows
+ *
+ * @param {number} checkColumn target Column
+ * @param {number} idColumn uuid Column
+ * @return void
+ */
+// Function to add UUIDs to empty rows in the specified target column
+function addDataToRow(
+  sheet: GoogleAppsScript.Spreadsheet.Sheet,
+  { idColumn, startRow }: ColumnModifier,
+  data: string,
+  targetRow: number
+) {
+  if (targetRow < startRow) {
+    return;
+  }
+  sheet.getRange(targetRow, idColumn).setValue(data);
+  logger(`Added Data '${data}' to row ${targetRow}`);
 }
