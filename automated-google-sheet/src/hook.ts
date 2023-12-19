@@ -17,12 +17,16 @@ class UnreachableCaseError extends Error {
   }
 }
 
+/**
+ * Register manual trigger
+ * https://developers.google.com/apps-script/guides/triggers/installable#manage_triggers_manually
+ */
 function registerHooks(e: GoogleAppsScript.Events.SheetsOnEdit) {
   const hookData = getHooks();
   logger(`Registering hooks, length: ${Object.entries(hookData).length}`);
   for (const [key, hook] of Object.entries(hookData)) {
     let sheet = e.source.getSheetByName(hook.sheet.name);
-    if(sheet === null) {
+    if (sheet === null) {
       removeHook(key);
       continue;
     }
@@ -39,7 +43,6 @@ function registerHooks(e: GoogleAppsScript.Events.SheetsOnEdit) {
     }
   }
 }
-
 
 // ---------------------------------------- Hook Utils ----------------------------------------
 
@@ -111,10 +114,10 @@ function getHooks(): Record<string, Hook> {
  */
 function listHooks(): string[][] {
   const hookData = getHooks();
-  if(Object.entries(hookData).length === 0) return [['No hooks found', '']];
+  if (Object.entries(hookData).length === 0) return [['No hooks found', '']];
   logger(`Listing hooks, length: ${Object.entries(hookData).length}`);
   const result: string[][] = [];
-  for(const [key, hook] of Object.entries(hookData)) {
+  for (const [key, hook] of Object.entries(hookData)) {
     result.push([key, JSON.stringify(hook)]);
     logger(`Hook: ${key}, on sheet ${hook.sheet.name} (#${hook.sheet.id}), type: ${hook.type} `);
   }
@@ -127,18 +130,17 @@ function listHooks(): string[][] {
  * @returns {string[][]} hooks with the specified ID
  * @customfunction
  */
-function getHook(id: string): string[][]{
+function getHook(id: string): string[][] {
   const hookData = getHooks();
   const hook = hookData[id];
-  if(!hook) return [['Hook not found', '']];
+  if (!hook) return [['Hook not found', '']];
   const result: string[][] = [];
   result.push(['id', id]);
-  for(const [key, value] of Object.entries(hook)) {
+  for (const [key, value] of Object.entries(hook)) {
     result.push([key, JSON.stringify(value)]);
   }
   return result;
 }
-
 
 // ---------------------------------------- ScriptProps ----------------------------------------
 /**
@@ -150,7 +152,7 @@ function getHook(id: string): string[][]{
 function listScriptProps(): string[][] {
   const props = PropertiesService.getScriptProperties().getProperties();
   const result: string[][] = [];
-  for(const [key, value] of Object.entries(props)) {
+  for (const [key, value] of Object.entries(props)) {
     result.push([key, value]);
   }
   return result;
