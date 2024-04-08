@@ -68,7 +68,7 @@ function addUUIDsToEmptyRows(
     if (targetValues[i][0] !== '' && uuidValues[i][0] === '') {
       // If the target cell is empty and the UUID cell is empty, add a UUID to the UUID column
       sheet.getRange(i + startRow, idColumn).setValue(uuid());
-      logger(`Added UUID to row ${i + startRow}`);
+      logger(`Added UUID to row ${i + startRow} , column ${idColumn}`);
     }
   }
 }
